@@ -2,7 +2,7 @@
 
 本项目的目标是从指定的数据源收集最新安全研究与新闻更新，并自动生成汇总报告。
 
-### secnews  
+## secnews  
 每周自动更新最新论文与安全新闻，保存至本地 JSONL 文件中。  
 
 **调用方法**：
@@ -16,7 +16,7 @@ python -m secnews.update <source>
 - arxiv cs.cr: [RSS](https://rss.arxiv.org/atom/cs.cr)
 - arxiv cs.ai: [RSS](https://rss.arxiv.org/atom/cs.ai)
 
-### top-conf
+## top-conf
 手动更新近几年四大安全顶会的论文。  
 自动生成每年的论文摘要简介与分类报告。
 

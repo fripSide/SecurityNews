@@ -94,7 +94,7 @@ def main():
 
     # Generate PDF and HTML
     os.makedirs('secnews/data/report', exist_ok=True)
-    filename_base = report_title
+    filename_base = f"SecurityNews_{end_date}"
     
     html_path = os.path.join('secnews/data/report', f"{filename_base}.html")
     with open(html_path, 'w', encoding='utf-8') as f:
