@@ -39,12 +39,18 @@ jobs:
 
       - name: Create Release
         if: hashFiles('secnews/data/report/*.pdf') != '' || hashFiles('secnews/data/report/*.html') != ''
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: "release-${{ steps.date.outputs.DATE }}"
-          name: "${{ steps.gen_pdf.outputs.REPORT_TITLE }}"
-          generate_release_notes: false
-          body: "自动生成的${{ steps.gen_pdf.outputs.REPORT_TITLE }} PDF 与 HTML。"
-          files: |
-            secnews/data/report/*.pdf
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="release-${{ steps.date.outputs.DATE }}"
+          TITLE="${{ steps.gen_pdf.outputs.REPORT_TITLE }}"
+          
+          # Delete existing release/tag if it exists to allow re-run
+          gh release delete "$TAG" -y --cleanup-tag || true
+          
+          # Create new release
+          gh release create "$TAG" \
+            --title "$TITLE" \
+            --notes "自动生成的 $TITLE PDF 与 HTML。" \
+            secnews/data/report/*.pdf \
             secnews/data/report/*.html

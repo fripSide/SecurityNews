@@ -47,7 +47,9 @@ uv run python top-conf/generate_conf_report.py usenix 2025
 ```
 
 ### 报告展示
-- **USENIX Security 2025**: [[HTML]](top-conf/data/report/USENIX_2025_Report.html) [[PDF]](top-conf/data/report/USENIX_2025_Report.pdf) — 采用精美的 Card-Style 布局。
+- **USENIX Security 2025**: [[HTML]](top-conf/data/report/USENIX_2025_Report.html) [[PDF]](top-conf/data/report/USENIX_2025_Report.pdf)
+
+
 
 ---
 
