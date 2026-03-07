@@ -74,16 +74,6 @@
 <h1>🛡️ 安全资讯周报</h1>
 <p class="subtitle">{{ date_range }}</p>
 
-{% if sections.bleepingcomputer %}
-<h2>🔒 BleepingComputer 安全资讯</h2>
-{% for article in sections.bleepingcomputer %}
-<div class="article">
-  <p class="article-title"><a href="{{ article.link }}">{{ article.title }}</a></p>
-  <p class="article-intro">{{ article.intro }}</p>
-</div>
-{% endfor %}
-{% endif %}
-
 {% if sections.arxiv_cs_cr %}
 <h2>📄 arXiv CS.CR 安全论文精选</h2>
 {% for article in sections.arxiv_cs_cr %}
@@ -97,6 +87,16 @@
 {% if sections.arxiv_cs_ai %}
 <h2>🤖 arXiv CS.AI 人工智能论文精选</h2>
 {% for article in sections.arxiv_cs_ai %}
+<div class="article">
+  <p class="article-title"><a href="{{ article.link }}">{{ article.title }}</a></p>
+  <p class="article-intro">{{ article.intro }}</p>
+</div>
+{% endfor %}
+{% endif %}
+
+{% if sections.bleepingcomputer %}
+<h2>🔒 BleepingComputer 安全资讯</h2>
+{% for article in sections.bleepingcomputer %}
 <div class="article">
   <p class="article-title"><a href="{{ article.link }}">{{ article.title }}</a></p>
   <p class="article-intro">{{ article.intro }}</p>
