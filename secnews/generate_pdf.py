@@ -27,6 +27,10 @@ def get_report_title(date_obj):
     week_names = ["第一周", "第二周", "第三周", "第四周"]
     return f"{date_obj.year}年{date_obj.month}月{week_names[week_num]}安全事件报告"
 
+def get_safe_filename(date_obj):
+    week_num = min((date_obj.day - 1) // 7 + 1, 4)
+    return f"{date_obj.year}.{date_obj.month}.{week_num}-report"
+
 def main():
     days = int(sys.argv[1]) if len(sys.argv) > 1 else 7
 
@@ -94,7 +98,8 @@ def main():
 
     # Generate PDF and HTML
     os.makedirs('secnews/data/report', exist_ok=True)
-    filename_base = report_title
+    dt_obj = datetime.strptime(end_date, '%Y-%m-%d')
+    filename_base = get_safe_filename(dt_obj)
     
     html_path = os.path.join('secnews/data/report', f"{filename_base}.html")
     with open(html_path, 'w', encoding='utf-8') as f:
