@@ -20,6 +20,7 @@ on:
 jobs:
   generate-report:
     runs-on: ubuntu-latest
+    timeout-minutes: 360
 
     steps:
     - name: Checkout repository
@@ -50,9 +51,9 @@ jobs:
       # we can cache it or push the progress so it picks up where it left off next time.
       # To do this correctly, we will unconditionally commit the progress if there are changes.
 
-    - name: Generate PDF Report
+    - name: Generate PDF and HTML Report
       if: always()
-      run: uv run python top-conf/generate_conf_pdf.py ${{ github.event.inputs.conference }} ${{ github.event.inputs.year }}
+      run: uv run python top-conf/generate_conf_report.py ${{ github.event.inputs.conference }} ${{ github.event.inputs.year }}
 
     - name: Commit Progress Data
       if: always()

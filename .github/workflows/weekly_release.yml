@@ -21,7 +21,7 @@ jobs:
           sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf-2.0-0 libffi-dev libcairo2 fonts-noto-cjk
 
       - name: Generate PDF and HTML
-        run: uv run python -m bignews.generate_pdf
+        run: uv run python -m secnews.generate_pdf
 
       - name: Get current date
         id: date

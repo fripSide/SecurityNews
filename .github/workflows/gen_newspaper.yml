@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - run: uv run python -m bignews.generate_newspaper
+      - run: uv run python -m secnews.generate_newspaper
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
@@ -26,7 +26,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/newspapers/
+          git add secnews/data/newspapers/
           git diff --cached --quiet || git commit -m "generate newspaper $(date -u +'%Y-%m-%d')"
           git pull --rebase
           git push
