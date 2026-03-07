@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ conference }} {{ year }} Papers Report</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+            @bottom-center {
+                content: counter(page);
+                font-family: 'Noto Serif CJK SC', 'Source Han Serif SC', serif;
+                font-size: 10pt;
+                color: #666;
+            }
+        }
+        body {
+            font-family: 'Noto Serif CJK SC', 'Source Han Serif SC', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 840px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        .header h1 {
+            color: #2c3e50;
+            font-size: 28pt;
+            margin: 0 0 10px 0;
+        }
+        .header p {
+            font-size: 12pt;
+            color: #666;
+            margin: 0;
+        }
+        .toc {
+            margin-bottom: 40px;
+            page-break-after: always;
+        }
+        .toc h2 {
+            font-size: 18pt;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .toc li {
+            margin-bottom: 8px;
+            font-size: 12pt;
+        }
+        .toc a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        .category {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        .category h2 {
+            color: #2c3e50;
+            font-size: 20pt;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        .paper {
+            margin-bottom: 25px;
+            background: #fdfdfd;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            page-break-inside: avoid;
+        }
+        .paper-title {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #2980b9;
+            margin: 0 0 5px 0;
+            text-decoration: none;
+        }
+        .paper-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .paper-authors {
+            font-size: 10pt;
+            color: #7f8c8d;
+            margin: 0 0 10px 0;
+            font-style: italic;
+        }
+        .paper-summary {
+            font-size: 11pt;
+            margin: 0;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+    <h1>{{ conference }} {{ year }} 论文总结 </h1>
+    <p>Generated on {{ generated_date }}</p>
+    <p>总计收录论文：{{ total_papers }} 篇</p>
+</div>
+
+<div class="toc">
+    <h2>分类目录 (Table of Contents)</h2>
+    <ul>
+        {% for category, papers in categorized_papers.items() %}
+        <li><a href="#cat-{{ loop.index }}">{{ category }} ({{ papers|length }} 篇)</a></li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="content">
+    {% for category, papers in categorized_papers.items() %}
+    <div class="category" id="cat-{{ loop.index }}">
+        <h2>{{ category }}</h2>
+        {% for paper in papers %}
+        <div class="paper">
+            <h3 class="paper-title">
+                <a href="{{ paper.link }}">{{ paper.title }}</a>
+            </h3>
+            <p class="paper-authors">{{ paper.author }}</p>
+            <p class="paper-summary"><strong>核心总结：</strong>{{ paper.summary_zh }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+</div>
+
+</body>
+</html>
