@@ -96,24 +96,32 @@ def main():
         generated_at=datetime.now(UTC).strftime('%Y-%m-%d %H:%M UTC'),
     )
 
-    # Generate PDF and HTML
-    os.makedirs('secnews/data/report', exist_ok=True)
+    # Generate Release Output (PDF and HTML)
+    os.makedirs('output', exist_ok=True)
     dt_obj = datetime.strptime(end_date, '%Y-%m-%d')
     filename_base = get_safe_filename(dt_obj)
     
-    html_path = os.path.join('secnews/data/report', f"{filename_base}.html")
-    with open(html_path, 'w', encoding='utf-8') as f:
-        f.write(html_content)
-    print(f"HTML generated: {html_path}")
+    release_html_path = os.path.join('output', f"{filename_base}.html")
+    release_pdf_path = os.path.join('output', f"{filename_base}.pdf")
     
-    pdf_path = os.path.join('secnews/data/report', f"{filename_base}.pdf")
-    HTML(string=html_content).write_pdf(pdf_path)
-    print(f"PDF generated: {pdf_path}")
+    with open(release_html_path, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    HTML(string=html_content).write_pdf(release_pdf_path)
+    print(f"Release files generated in output/: {filename_base}.html/pdf")
+
+    # Generate Repository Backup (HTML only)
+    os.makedirs('secnews/data/report', exist_ok=True)
+    backup_html_path = os.path.join('secnews/data/report', f"{filename_base}.html")
+    with open(backup_html_path, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    print(f"Backup HTML generated: {backup_html_path}")
 
     # Export to GitHub Actions output if needed
     if 'GITHUB_OUTPUT' in os.environ:
         with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as f:
             f.write(f"REPORT_TITLE={report_title}\n")
+            f.write(f"REPORT_FILENAME={filename_base}\n")
 
 if __name__ == '__main__':
     main()

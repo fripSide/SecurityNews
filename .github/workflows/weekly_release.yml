@@ -33,13 +33,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config core.quotepath false
-          git add secnews/data/report/
+          # Only commit HTML backups to keep the repo small
+          git add secnews/data/report/*.html
           git diff --cached --quiet || git commit -m "generate weekly report ${{ steps.date.outputs.DATE }}"
           git pull --rebase
           git push
 
       - name: Create Release
-        if: hashFiles('secnews/data/report/*.pdf') != '' || hashFiles('secnews/data/report/*.html') != ''
+        if: hashFiles('output/*.pdf') != '' || hashFiles('output/*.html') != ''
         env:
           GH_TOKEN: ${{ github.token }}
           LANG: C.UTF-8
@@ -47,15 +48,15 @@ jobs:
           TAG="release-${{ steps.date.outputs.DATE }}"
           TITLE="${{ steps.gen_pdf.outputs.REPORT_TITLE }}"
           
-          echo "Debug: Listing files in secnews/data/report/"
-          ls -l secnews/data/report/
+          echo "Debug: Listing files in output/"
+          ls -l output/
           
           # Delete existing release/tag if it exists to allow re-run
           gh release delete "$TAG" -y --cleanup-tag || true
           
-          # Create new release
+          # Create new release sourcing assets from the temporary output/ directory
           gh release create "$TAG" \
             --title "$TITLE" \
             --notes "自动生成的 $TITLE PDF 与 HTML。" \
-            secnews/data/report/*.pdf \
-            secnews/data/report/*.html
+            output/*.pdf \
+            output/*.html
