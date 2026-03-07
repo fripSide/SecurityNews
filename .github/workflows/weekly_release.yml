@@ -1,0 +1,38 @@
+name: weekly_release
+
+on:
+  schedule:
+    - cron: '0 6 * * 6'
+  workflow_dispatch:
+
+jobs:
+  release_pdf:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Install system dependencies for weasyprint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf-2.0-0 libffi-dev libcairo2
+
+      - name: Generate PDF
+        run: uv run python -m bignews.generate_pdf
+
+      - name: Get current date
+        id: date
+        run: echo "DATE=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+
+      - name: Create Release
+        if: hashFiles('output/*.pdf') != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: weekly-${{ steps.date.outputs.DATE }}
+          name: "安全资讯周报 ${{ steps.date.outputs.DATE }}"
+          generate_release_notes: false
+          body: "自动生成的安全资讯周报 PDF。"
+          files: output/*.pdf
