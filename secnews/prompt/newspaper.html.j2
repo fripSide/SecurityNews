@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>安全资讯周报 {{ date_range }}</title>
+<title>{{ report_title | default('安全资讯周报') }} {{ date_range }}</title>
 <style>
   @page {
     size: A4;
@@ -71,7 +71,7 @@
 </head>
 <body>
 
-<h1>🛡️ 安全资讯周报</h1>
+<h1>🛡️ {{ report_title | default('安全资讯周报') }}</h1>
 <p class="subtitle">{{ date_range }}</p>
 
 {% if sections.arxiv_cs_cr %}

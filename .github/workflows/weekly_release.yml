@@ -21,6 +21,7 @@ jobs:
           sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf-2.0-0 libffi-dev libcairo2 fonts-noto-cjk
 
       - name: Generate PDF and HTML
+        id: gen_pdf
         run: uv run python -m secnews.generate_pdf
 
       - name: Get current date
@@ -40,10 +41,10 @@ jobs:
         if: hashFiles('secnews/data/report/*.pdf') != '' || hashFiles('secnews/data/report/*.html') != ''
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: weekly-${{ steps.date.outputs.DATE }}
-          name: "安全资讯周报 ${{ steps.date.outputs.DATE }}"
+          tag_name: "release-${{ steps.date.outputs.DATE }}"
+          name: "${{ steps.gen_pdf.outputs.REPORT_TITLE }}"
           generate_release_notes: false
-          body: "自动生成的安全资讯周报 PDF 与 HTML。"
+          body: "自动生成的${{ steps.gen_pdf.outputs.REPORT_TITLE }} PDF 与 HTML。"
           files: |
             secnews/data/report/*.pdf
             secnews/data/report/*.html

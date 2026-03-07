@@ -21,6 +21,12 @@ from weasyprint import HTML
 NEWSPAPERS_DIR = Path('secnews/data/newspapers')
 
 
+def get_report_title(date_obj):
+    # Cap the week number at 3 (0-indexed) so a month only has 4 weeks max
+    week_num = min((date_obj.day - 1) // 7, 3)
+    week_names = ["第一周", "第二周", "第三周", "第四周"]
+    return f"{date_obj.year}年{date_obj.month}月{week_names[week_num]}安全事件报告"
+
 def main():
     days = int(sys.argv[1]) if len(sys.argv) > 1 else 7
 
@@ -74,7 +80,9 @@ def main():
     with open('secnews/prompt/newspaper.html.j2', encoding='utf-8') as f:
         template = Template(f.read())
 
+    report_title = get_report_title(datetime.strptime(end_date, '%Y-%m-%d'))
     html_content = template.render(
+        report_title=report_title,
         date_range=date_range,
         sections={
             'bleepingcomputer': all_bleeping,
@@ -86,7 +94,7 @@ def main():
 
     # Generate PDF and HTML
     os.makedirs('secnews/data/report', exist_ok=True)
-    filename_base = f"SecurityNews_{start_date}_to_{end_date}"
+    filename_base = report_title
     
     html_path = os.path.join('secnews/data/report', f"{filename_base}.html")
     with open(html_path, 'w', encoding='utf-8') as f:
@@ -97,6 +105,10 @@ def main():
     HTML(string=html_content).write_pdf(pdf_path)
     print(f"PDF generated: {pdf_path}")
 
+    # Export to GitHub Actions output if needed
+    if 'GITHUB_OUTPUT' in os.environ:
+        with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as f:
+            f.write(f"REPORT_TITLE={report_title}\n")
 
 if __name__ == '__main__':
     main()
