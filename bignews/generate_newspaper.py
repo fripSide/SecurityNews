@@ -12,6 +12,7 @@ from bignews.util import SOURCES
 
 load_dotenv()
 
+LLM_MODEL = os.getenv('LLM_MODEL')
 ARTICLES_DIR = Path('data/articles')
 NEWSPAPERS_DIR = Path('data/newspapers')
 
@@ -21,9 +22,9 @@ def query_llm(prompt):
     client = OpenAI()
 
     completion = client.chat.completions.create(
-        model="gemini-3-flash-preview",
+        model=LLM_MODEL or "gemini-3-flash-preview",
         messages=[
-            {"role": "developer", "content": open('bignews/prompt/sys.j2', encoding='utf-8').read()},
+            {"role": "system", "content": open('bignews/prompt/sys.j2', encoding='utf-8').read()},
             {"role": "user", "content": prompt}
         ],
         response_format={"type": "json_object"},
