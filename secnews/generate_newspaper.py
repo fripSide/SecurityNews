@@ -8,13 +8,13 @@ from openai import OpenAI
 from jinja2 import Template
 from dotenv import load_dotenv
 
-from bignews.util import SOURCES
+from secnews.util import SOURCES
 
 load_dotenv()
 
 LLM_MODEL = os.getenv('LLM_MODEL')
-ARTICLES_DIR = Path('data/articles')
-NEWSPAPERS_DIR = Path('data/newspapers')
+ARTICLES_DIR = Path('secnews/data/articles')
+NEWSPAPERS_DIR = Path('secnews/data/newspapers')
 
 
 @retry(tries=3, delay=2, backoff=2)
@@ -24,7 +24,7 @@ def query_llm(prompt):
     completion = client.chat.completions.create(
         model=LLM_MODEL or "gemini-3-flash-preview",
         messages=[
-            {"role": "system", "content": open('bignews/prompt/sys.j2', encoding='utf-8').read()},
+            {"role": "system", "content": open('secnews/prompt/sys.j2', encoding='utf-8').read()},
             {"role": "user", "content": prompt}
         ],
         response_format={"type": "json_object"},
@@ -100,7 +100,7 @@ def main():
         return res
 
     def gen_arxiv(source):
-        with open('bignews/prompt/arxiv.j2', encoding='utf-8') as f:
+        with open('secnews/prompt/arxiv.j2', encoding='utf-8') as f:
             arxiv_j2 = f.read()
             docs = get_articles(source)
             if not docs:
@@ -111,7 +111,7 @@ def main():
             return enrich(json.loads(query_llm(prompt)), docs)
 
     def gen_bleepingcomputer():
-        with open('bignews/prompt/bleepingcomputer.j2', encoding='utf-8') as f:
+        with open('secnews/prompt/bleepingcomputer.j2', encoding='utf-8') as f:
             bleepingcomputer_j2 = f.read()
             docs = get_articles('bleepingcomputer')
             if not docs:

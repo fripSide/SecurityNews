@@ -7,7 +7,7 @@ from pathlib import Path
 from jinja2 import Template
 from weasyprint import HTML
 
-NEWSPAPERS_DIR = Path('data/newspapers')
+NEWSPAPERS_DIR = Path('secnews/data/newspapers')
 
 
 def main():
@@ -60,7 +60,7 @@ def main():
     print(f"Articles: bleepingcomputer={len(all_bleeping)}, cs.cr={len(all_cs_cr)}, cs.ai={len(all_cs_ai)}")
 
     # Render HTML
-    with open('bignews/prompt/newspaper.html.j2', encoding='utf-8') as f:
+    with open('secnews/prompt/newspaper.html.j2', encoding='utf-8') as f:
         template = Template(f.read())
 
     html_content = template.render(

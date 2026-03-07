@@ -5,9 +5,9 @@ import traceback
 from datetime import datetime, UTC, timedelta
 from pathlib import Path
 
-from bignews.util import fetch_rss, SOURCES
+from secnews.util import fetch_rss, SOURCES
 
-DATA_DIR = Path('data/articles')
+DATA_DIR = Path('secnews/data/articles')
 
 
 def main():
