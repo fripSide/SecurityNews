@@ -5,6 +5,17 @@ from datetime import datetime, UTC, timedelta
 from pathlib import Path
 
 from jinja2 import Template
+import subprocess, platform
+
+# On macOS, WeasyPrint needs Homebrew native libs (pango, glib)
+if platform.system() == 'Darwin':
+    try:
+        brew_prefix = subprocess.check_output(['brew', '--prefix'], text=True).strip()
+        dyld = os.environ.get('DYLD_FALLBACK_LIBRARY_PATH', '')
+        os.environ['DYLD_FALLBACK_LIBRARY_PATH'] = f"{brew_prefix}/lib:{dyld}".rstrip(':')
+    except Exception:
+        pass
+
 from weasyprint import HTML
 
 NEWSPAPERS_DIR = Path('secnews/data/newspapers')
