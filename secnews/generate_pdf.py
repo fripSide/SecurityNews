@@ -85,15 +85,15 @@ def main():
     )
 
     # Generate PDF and HTML
-    os.makedirs('output', exist_ok=True)
+    os.makedirs('secnews/data/report', exist_ok=True)
     filename_base = f"SecurityNews_{start_date}_to_{end_date}"
     
-    html_path = os.path.join('output', f"{filename_base}.html")
+    html_path = os.path.join('secnews/data/report', f"{filename_base}.html")
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html_content)
     print(f"HTML generated: {html_path}")
     
-    pdf_path = os.path.join('output', f"{filename_base}.pdf")
+    pdf_path = os.path.join('secnews/data/report', f"{filename_base}.pdf")
     HTML(string=html_content).write_pdf(pdf_path)
     print(f"PDF generated: {pdf_path}")
 

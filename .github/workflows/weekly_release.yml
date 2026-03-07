@@ -27,8 +27,17 @@ jobs:
         id: date
         run: echo "DATE=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
+      - name: Commit and push report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add secnews/data/report/
+          git diff --cached --quiet || git commit -m "generate weekly report ${{ steps.date.outputs.DATE }}"
+          git pull --rebase
+          git push
+
       - name: Create Release
-        if: hashFiles('output/*.pdf') != '' || hashFiles('output/*.html') != ''
+        if: hashFiles('secnews/data/report/*.pdf') != '' || hashFiles('secnews/data/report/*.html') != ''
         uses: softprops/action-gh-release@v2
         with:
           tag_name: weekly-${{ steps.date.outputs.DATE }}
@@ -36,5 +45,5 @@ jobs:
           generate_release_notes: false
           body: "自动生成的安全资讯周报 PDF 与 HTML。"
           files: |
-            output/*.pdf
-            output/*.html
+            secnews/data/report/*.pdf
+            secnews/data/report/*.html
