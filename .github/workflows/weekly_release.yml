@@ -32,6 +32,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config core.quotepath false
           git add secnews/data/report/
           git diff --cached --quiet || git commit -m "generate weekly report ${{ steps.date.outputs.DATE }}"
           git pull --rebase
@@ -41,9 +42,13 @@ jobs:
         if: hashFiles('secnews/data/report/*.pdf') != '' || hashFiles('secnews/data/report/*.html') != ''
         env:
           GH_TOKEN: ${{ github.token }}
+          LANG: C.UTF-8
         run: |
           TAG="release-${{ steps.date.outputs.DATE }}"
           TITLE="${{ steps.gen_pdf.outputs.REPORT_TITLE }}"
+          
+          echo "Debug: Listing files in secnews/data/report/"
+          ls -l secnews/data/report/
           
           # Delete existing release/tag if it exists to allow re-run
           gh release delete "$TAG" -y --cleanup-tag || true

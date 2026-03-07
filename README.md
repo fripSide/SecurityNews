@@ -47,7 +47,7 @@ uv run python top-conf/generate_conf_report.py usenix 2025
 ```
 
 ### 报告展示
-- **USENIX Security 2025**: [[HTML]](top-conf/data/report/USENIX_2025_Report.html) [[PDF]](top-conf/data/report/USENIX_2025_Report.pdf)
+- **USENIX Security 2025 论文总结**: [[HTML]](top-conf/data/report/USENIX_2025_Report.html) [[PDF]](top-conf/data/report/USENIX_2025_Report.pdf)
 
 
 
