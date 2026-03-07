@@ -73,13 +73,18 @@ def main():
         generated_at=datetime.now(UTC).strftime('%Y-%m-%d %H:%M UTC'),
     )
 
-    # Generate PDF
+    # Generate PDF and HTML
     os.makedirs('output', exist_ok=True)
-    filename = f"SecurityNews_{start_date}_to_{end_date}.pdf"
-    output_path = os.path.join('output', filename)
-
-    HTML(string=html_content).write_pdf(output_path)
-    print(f"PDF generated: {output_path}")
+    filename_base = f"SecurityNews_{start_date}_to_{end_date}"
+    
+    html_path = os.path.join('output', f"{filename_base}.html")
+    with open(html_path, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    print(f"HTML generated: {html_path}")
+    
+    pdf_path = os.path.join('output', f"{filename_base}.pdf")
+    HTML(string=html_content).write_pdf(pdf_path)
+    print(f"PDF generated: {pdf_path}")
 
 
 if __name__ == '__main__':

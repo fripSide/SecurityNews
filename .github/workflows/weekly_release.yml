@@ -18,9 +18,9 @@ jobs:
       - name: Install system dependencies for weasyprint
         run: |
           sudo apt-get update
-          sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf-2.0-0 libffi-dev libcairo2
+          sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf-2.0-0 libffi-dev libcairo2 fonts-noto-cjk
 
-      - name: Generate PDF
+      - name: Generate PDF and HTML
         run: uv run python -m bignews.generate_pdf
 
       - name: Get current date
@@ -28,11 +28,13 @@ jobs:
         run: echo "DATE=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
       - name: Create Release
-        if: hashFiles('output/*.pdf') != ''
+        if: hashFiles('output/*.pdf') != '' || hashFiles('output/*.html') != ''
         uses: softprops/action-gh-release@v2
         with:
           tag_name: weekly-${{ steps.date.outputs.DATE }}
           name: "安全资讯周报 ${{ steps.date.outputs.DATE }}"
           generate_release_notes: false
-          body: "自动生成的安全资讯周报 PDF。"
-          files: output/*.pdf
+          body: "自动生成的安全资讯周报 PDF 与 HTML。"
+          files: |
+            output/*.pdf
+            output/*.html
